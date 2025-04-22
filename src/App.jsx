@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { dummyArticles } from './data/dummyArticles';
 import ArticleList from './components/ArticleList';
 
-import './App.css';
-
 const sortArticles = (articles) => {
   return [...articles.sort((a, b) => b.upvotes - a.upvotes)];
 };
@@ -20,11 +18,13 @@ const App = () => {
   };
 
   return (
-    <>
-      <h2>meowrank 🐱</h2>
+    <div className="min-h-screen bg-yellow-50 text-yellow-900 flex flex-col items-center px-4 py-8">
+      <h2 className="text-4xl font-semibold text-yellow-800 py-4">
+        meowrank 🐱
+      </h2>
       <ArticleList articles={articles} onUpvote={handleUpvote} />
       {console.log(articles)}
-    </>
+    </div>
   );
 };
 
