@@ -6,6 +6,7 @@ import SortButton from './components/SortButton';
 import './App.css';
 
 const STORAGE_KEY = 'meowrank-articles';
+const SORT_KEY = 'meowrank-sort';
 
 const sortArticlesByUpvotes = (articles) => {
   return [...articles].sort((a, b) => b.upvotes - a.upvotes);
@@ -21,17 +22,26 @@ const App = () => {
     return stored ? JSON.parse(stored) : dummyArticles;
   };
 
+  const getInitialSortKey = () => {
+    const stored = localStorage.getItem(SORT_KEY);
+    return stored ? stored : '';
+  };
+
   const sortOptions = {
     upvotes: sortArticlesByUpvotes,
     date: sortArticlesByDate,
   };
 
   const [articles, setArticles] = useState(getInitialArticles);
-  const [sortKey, setSortKey] = useState('');
+  const [sortKey, setSortKey] = useState(getInitialSortKey);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
   }, [articles]);
+
+  useEffect(() => {
+    localStorage.setItem(SORT_KEY, sortKey);
+  }, [sortKey]);
 
   const handleUpvote = (id) => {
     const updated = articles.map((article) =>
