@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { dummyArticles } from './data/dummyArticles';
 import ArticleList from './components/ArticleList';
 import SortButton from './components/SortButton';
 
 import './App.css';
+
+const STORAGE_KEY = 'meowrank-articles';
 
 const sortArticlesByUpvotes = (articles) => {
   return [...articles].sort((a, b) => b.upvotes - a.upvotes);
@@ -14,19 +16,32 @@ const sortArticlesByDate = (articles) => {
 };
 
 const App = () => {
-  const [articles, setArticles] = useState(dummyArticles);
-  const [sortKey, setSortKey] = useState('');
-
-  const handleUpvote = (id) => {
-    const updated = articles.map((article) =>
-      article.id === id ? { ...article, upvotes: article.upvotes + 1 } : article
-    );
-    setArticles(updated);
+  const getInitialArticles = () => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : dummyArticles;
   };
 
   const sortOptions = {
     upvotes: sortArticlesByUpvotes,
     date: sortArticlesByDate,
+  };
+
+  const [articles, setArticles] = useState(getInitialArticles);
+  const [sortKey, setSortKey] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
+  }, [articles]);
+
+  const handleUpvote = (id) => {
+    const updated = articles.map((article) =>
+      article.id === id ? { ...article, upvotes: article.upvotes + 1 } : article
+    );
+
+    const finalList =
+      sortKey === 'upvotes' ? sortArticlesByUpvotes(updated) : updated;
+
+    setArticles(finalList);
   };
 
   const handleSortArticles = (key) => {
