@@ -10,7 +10,7 @@ A little cat-themed ranking board for cat 🐈‍⬛ articles - with paws 🐾, 
 
 ## 🖥️ Demo
 
-[meowrank app](meowrank.netlify.app)
+[meowrank app](https://meowrank.netlify.app/)
 
 ## 🛠️ Tech Stack
 
